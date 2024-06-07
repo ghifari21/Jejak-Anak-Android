@@ -1,23 +1,20 @@
-package com.gosty.jejakanak.data.models
+package com.gosty.jejakanak.core.data.models
 
 import android.os.Parcelable
-import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
 import kotlinx.parcelize.Parcelize
 
 @IgnoreExtraProperties
 @Parcelize
-data class ChildModel(
+data class ParentModel(
     val id: String? = null,
     val firstName: String? = null,
     val lastName: String? = null,
     val email: String? = null,
     val phone: String? = null,
-    val grade: String? = null,
-    var parentId: String? = null,
-    val coordinate: CoordinateModel? = null
+    val childrenId: List<String>? = null,
+    val geofences: List<GeofenceModel>? = null
 ) : Parcelable {
-    @Exclude
     fun toMap(): Map<String, Any?> =
         mapOf(
             "id" to id,
@@ -25,8 +22,7 @@ data class ChildModel(
             "lastName" to lastName,
             "email" to email,
             "phone" to phone,
-            "grade" to grade,
-            "parentId" to parentId,
-            "coordinate" to coordinate
+            "childrenId" to childrenId,
+            "geofences" to geofences
         )
 }

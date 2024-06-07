@@ -1,11 +1,11 @@
-package com.gosty.jejakanak.data.repositories
+package com.gosty.jejakanak.core.data.repositories
 
 import androidx.lifecycle.LiveData
 import com.google.firebase.auth.AuthCredential
-import com.gosty.jejakanak.data.models.ChildModel
-import com.gosty.jejakanak.data.models.CoordinateModel
-import com.gosty.jejakanak.data.models.ParentModel
-import com.gosty.jejakanak.data.source.FirebaseDataSource
+import com.gosty.jejakanak.core.data.models.ChildModel
+import com.gosty.jejakanak.core.data.models.CoordinateModel
+import com.gosty.jejakanak.core.data.models.ParentModel
+import com.gosty.jejakanak.core.data.source.FirebaseDataSource
 import com.gosty.jejakanak.utils.Result
 import javax.inject.Inject
 import javax.inject.Singleton

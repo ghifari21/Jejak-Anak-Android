@@ -1,8 +1,8 @@
-package com.gosty.jejakanak.data.repositories
+package com.gosty.jejakanak.core.data.repositories
 
 import androidx.lifecycle.LiveData
-import com.gosty.jejakanak.data.models.GeofenceModel
-import com.gosty.jejakanak.data.source.FirebaseDataSource
+import com.gosty.jejakanak.core.data.models.GeofenceModel
+import com.gosty.jejakanak.core.data.source.FirebaseDataSource
 import com.gosty.jejakanak.utils.Result
 import javax.inject.Inject
 import javax.inject.Singleton

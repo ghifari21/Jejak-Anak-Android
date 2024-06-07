@@ -1,4 +1,4 @@
-package com.gosty.jejakanak.data.models
+package com.gosty.jejakanak.core.data.models
 
 import android.os.Parcelable
 import com.google.firebase.database.Exclude

@@ -24,8 +24,10 @@ fun Long.toDateTime(): String {
 }
 
 fun getRandomString(): String {
-    val allowedChars = '0'..'9'
-    return (1..8)
+    val allowedChars = ('0'..'9') + ('A'..'Z') + ('a'..'z')
+    return (1..5)
         .map { allowedChars.random() }
         .joinToString("")
 }
+
+fun Float.toKm(): Float = this / 1000

@@ -1,8 +1,8 @@
-package com.gosty.jejakanak.utils
+package com.gosty.jejakanak.helpers
 
-import com.gosty.jejakanak.data.models.CoordinateModel
+import com.gosty.jejakanak.core.data.models.CoordinateModel
 
-object GeofenceUtils {
+object GeofenceHelper {
     fun windingNumber(point: CoordinateModel, polygon: List<CoordinateModel>): Int {
         var windingNumber = 0
 

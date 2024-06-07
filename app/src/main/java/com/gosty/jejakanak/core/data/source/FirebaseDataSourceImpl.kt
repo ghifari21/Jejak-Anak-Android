@@ -1,4 +1,4 @@
-package com.gosty.jejakanak.data.source
+package com.gosty.jejakanak.core.data.source
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -11,10 +11,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.gosty.jejakanak.BuildConfig
-import com.gosty.jejakanak.data.models.ChildModel
-import com.gosty.jejakanak.data.models.CoordinateModel
-import com.gosty.jejakanak.data.models.GeofenceModel
-import com.gosty.jejakanak.data.models.ParentModel
+import com.gosty.jejakanak.core.data.models.ChildModel
+import com.gosty.jejakanak.core.data.models.CoordinateModel
+import com.gosty.jejakanak.core.data.models.GeofenceModel
+import com.gosty.jejakanak.core.data.models.ParentModel
 import com.gosty.jejakanak.utils.Result
 import com.gosty.jejakanak.utils.splitName
 import javax.inject.Inject
@@ -141,6 +141,7 @@ class FirebaseDataSourceImpl @Inject constructor(
 
     override fun addChild(email: String): LiveData<Result<String>> {
         val uid = auth.currentUser?.uid
+        val name = auth.currentUser?.displayName
         val result = MediatorLiveData<Result<String>>()
         result.value = Result.Loading
 
@@ -153,6 +154,11 @@ class FirebaseDataSourceImpl @Inject constructor(
                     .addOnSuccessListener {
                         result.value = Result.Success("Berhasil menambahkan anak")
                     }
+                    .addOnFailureListener { e ->
+                        result.value = Result.Error(e.message.toString())
+                        crashlytics.log(e.message.toString())
+                    }
+                childRef.child(child?.id!!).child("parentId").child(name!!).setValue(uid)
                     .addOnFailureListener { e ->
                         result.value = Result.Error(e.message.toString())
                         crashlytics.log(e.message.toString())
