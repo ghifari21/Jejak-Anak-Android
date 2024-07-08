@@ -1,26 +1,20 @@
 package com.gosty.jejakanak.di
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.database.FirebaseDatabase
+import com.gosty.jejakanak.core.domain.usecases.GeofenceUseCase
+import com.gosty.jejakanak.core.domain.usecases.GeofenceUseCaseImpl
+import com.gosty.jejakanak.core.domain.usecases.UserUseCase
+import com.gosty.jejakanak.core.domain.usecases.UserUseCaseImpl
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
-    @Provides
-    @Singleton
-    fun provideFirebaseDatabase(): FirebaseDatabase = FirebaseDatabase.getInstance()
+abstract class AppModule {
+    @Binds
+    abstract fun provideUserUseCase(userUseCaseImpl: UserUseCaseImpl): UserUseCase
 
-    @Provides
-    @Singleton
-    fun provideFirebaseCrashlytics(): FirebaseCrashlytics = FirebaseCrashlytics.getInstance()
-
-    @Provides
-    @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+    @Binds
+    abstract fun provideGeofenceUseCase(geofenceUseCaseImpl: GeofenceUseCaseImpl): GeofenceUseCase
 }

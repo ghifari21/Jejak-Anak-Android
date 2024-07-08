@@ -1,9 +1,27 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.JejakAnak" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/dark_blue_0A2647</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 
     <style name="Theme.JejakAnak" parent="Base.Theme.JejakAnak" />
+
+    <style name="Theme.JejakAnak.Starting" parent="Theme.JejakAnak">
+        <!-- Set the splash screen background, animated icon,
+        and animation duration. -->
+        <item name="windowSplashScreenBackground">@color/dark_blue_0A2647</item>
+
+        <!-- Use windowSplashScreenAnimatedIcon to add a drawable or an animated
+             drawable. One of these is required. -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <!-- Required for animated icons. -->
+        <item name="windowSplashScreenAnimationDuration">200</item>
+
+        <!-- Set the theme of the Activity that directly follows your splash
+        screen. This is required. -->
+        <item name="postSplashScreenTheme">@style/Theme.JejakAnak</item>
+    </style>
 </resources>

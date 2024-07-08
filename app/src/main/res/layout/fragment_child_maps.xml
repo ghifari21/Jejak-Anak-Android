@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.kennyc.view.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/child_maps_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:msv_errorView="@layout/layout_error_common"
+    app:msv_loadingView="@layout/layout_loading_common"
+    app:msv_viewState="content"
+    tools:context=".ui.child.map.ChildMapsFragment">
+
+    <fragment
+        android:id="@+id/child_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</com.kennyc.view.MultiStateView>

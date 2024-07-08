@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_nav_graph"
+    app:startDestination="@id/parent_navigation_map">
+
+    <fragment
+        android:id="@+id/parent_navigation_map"
+        android:name="com.gosty.jejakanak.ui.parent.map.ParentMapsFragment"
+        android:label="@string/map"
+        tools:layout="@layout/fragment_parent_maps">
+
+        <action
+            android:id="@+id/action_parent_navigation_map_to_parent_navigation_manage"
+            app:destination="@id/parent_navigation_manage" />
+
+        <action
+            android:id="@+id/action_parent_navigation_map_to_parent_navigation_profile"
+            app:destination="@id/parent_navigation_profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/parent_navigation_manage"
+        android:name="com.gosty.jejakanak.ui.parent.manage.ParentManageFragment"
+        android:label="@string/manage"
+        tools:layout="@layout/fragment_parent_manage">
+
+        <action
+            android:id="@+id/action_parent_navigation_manage_to_parent_navigation_map"
+            app:destination="@id/parent_navigation_map" />
+
+        <action
+            android:id="@+id/action_parent_navigation_manage_to_parent_navigation_profile"
+            app:destination="@id/parent_navigation_profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/parent_navigation_profile"
+        android:name="com.gosty.jejakanak.ui.parent.profile.ParentProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_parent_profile">
+
+        <action
+            android:id="@+id/action_parent_navigation_profile_to_parent_navigation_map"
+            app:destination="@id/parent_navigation_map" />
+
+        <action
+            android:id="@+id/action_parent_navigation_profile_to_parent_navigation_manage"
+            app:destination="@id/parent_navigation_manage" />
+    </fragment>
+</navigation>

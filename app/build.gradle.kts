@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kapt)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 android {
@@ -18,10 +19,12 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
 
         buildConfigField("String", "PARENT_REF", "\"parents\"")
         buildConfigField("String", "CHILD_REF", "\"children\"")
-        buildConfigField("String", "SHARED_PREF", "\"shared_preferences\"")
+        buildConfigField("String", "SHARED_PREF", "\"shared_preferences_jejak_anak\"")
+        buildConfigField("String", "ROLE_KEY", "\"user_role\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,6 +58,24 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.multidex)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.cardView)
+
+    // coroutines support
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    // Splash Screen
+    implementation(libs.androidx.core.splashscreen)
 
     // Lottie, Shimmer, and StateView
     implementation(libs.airbnb.lottie)
@@ -73,11 +94,19 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     kapt(libs.hilt.compiler)
 
-    // Firebase
+    // Google
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.messaging)
+    implementation(libs.play.service.auth)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+
+    // Credentials Manager
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 
     // Testing
     testImplementation(libs.junit)
