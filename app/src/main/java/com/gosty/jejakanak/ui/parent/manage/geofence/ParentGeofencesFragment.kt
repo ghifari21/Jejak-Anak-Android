@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -20,7 +21,9 @@ import com.gosty.jejakanak.core.domain.models.CoordinateModel
 import com.gosty.jejakanak.core.domain.models.GeofenceModel
 import com.gosty.jejakanak.core.ui.RvGeofenceListAdapter
 import com.gosty.jejakanak.databinding.FragmentParentGeonfencesBinding
+import com.gosty.jejakanak.helpers.GeofenceHelper
 import com.gosty.jejakanak.ui.parent.manage.geofence.map.ParentAddGeofenceMapsActivity
+import com.gosty.jejakanak.ui.parent.map.ParentMapsFragment
 import com.gosty.jejakanak.utils.Result
 import com.gosty.jejakanak.utils.showContentState
 import com.gosty.jejakanak.utils.showEmptyState
@@ -147,6 +150,10 @@ class ParentGeofencesFragment : Fragment(), MultiStateView.StateListener {
                 override fun onDeleteGeofenceClicked(geofenceModel: GeofenceModel) {
                     deleteGeofenceDialog(geofenceModel)
                 }
+
+                override fun onGeofenceClicked(geofenceModel: GeofenceModel) {
+                    moveCameraToGeofence(geofenceModel)
+                }
             }
         )
     }
@@ -180,7 +187,7 @@ class ParentGeofencesFragment : Fragment(), MultiStateView.StateListener {
                             putExtra(EXTRA_LABEL, label)
                             putExtra(EXTRA_ZONE_TYPE, zoneType[0])
                         }
-                    launcherIntentMaps.launch(intent)
+                    toMapsPage(intent)
                 } else {
                     showToast(activity?.getString(R.string.fill_all_fields).toString())
                 }
@@ -250,7 +257,7 @@ class ParentGeofencesFragment : Fragment(), MultiStateView.StateListener {
                             putExtra(EXTRA_ZONE_TYPE, zoneType[0])
                             putExtra(EXTRA_ID, geofenceModel.id)
                         }
-                    launcherIntentMaps.launch(intent)
+                    toMapsPage(intent)
                 } else {
                     showToast(activity?.getString(R.string.fill_all_fields).toString())
                 }
@@ -270,6 +277,10 @@ class ParentGeofencesFragment : Fragment(), MultiStateView.StateListener {
             .show()
     }
 
+    private fun toMapsPage(intent: Intent) {
+        launcherIntentMaps.launch(intent)
+    }
+
     private fun deleteGeofenceDialog(geofenceModel: GeofenceModel) {
         MaterialAlertDialogBuilder(requireActivity())
             .setTitle(activity?.getString(R.string.confirmation))
@@ -281,6 +292,19 @@ class ParentGeofencesFragment : Fragment(), MultiStateView.StateListener {
                 dialog.dismiss()
             }
             .show()
+    }
+
+    private fun moveCameraToGeofence(geofenceModel: GeofenceModel) {
+        val centroid = GeofenceHelper.calculateCentroid(geofenceModel.coordinates!!)
+
+        val bundle = Bundle().apply {
+            putDouble(ParentMapsFragment.EXTRA_LATITUDE, centroid.latitude)
+            putDouble(ParentMapsFragment.EXTRA_LONGITUDE, centroid.longitude)
+        }
+
+        findNavController().navigate(
+            R.id.action_parent_navigation_manage_to_parent_navigation_map, bundle
+        )
     }
 
     private fun removeGeofence(id: String) {

@@ -10,6 +10,8 @@ import com.gosty.jejakanak.utils.Result
 interface UserUseCase {
     fun signIn(credential: AuthCredential, isParent: Boolean): LiveData<Result<String>>
 
+    suspend fun signOut()
+
     fun isUserPhoneNumberExist(): LiveData<Result<Boolean>>
 
     fun inputUserPhoneNumber(phoneNumber: String): LiveData<Result<String>>

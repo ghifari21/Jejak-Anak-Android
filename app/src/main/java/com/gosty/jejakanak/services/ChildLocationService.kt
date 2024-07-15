@@ -140,10 +140,20 @@ class ChildLocationService : Service() {
                         val type = if (geofence.type == "danger") "bahaya" else "aman"
                         if (isInsideGeofence) {
                             // Pengguna masuk ke geofence
-                            buildGeofenceNotification(geofence.label!!, "memasuki", type)
+                            buildGeofenceNotification(
+                                geofence.label!!,
+                                "memasuki",
+                                type,
+                                geofence.id!!
+                            )
                         } else {
                             // Pengguna keluar dari geofence
-                            buildGeofenceNotification(geofence.label!!, "keluar dari", type)
+                            buildGeofenceNotification(
+                                geofence.label!!,
+                                "keluar dari",
+                                type,
+                                geofence.id!!
+                            )
                         }
                         // Update status pengguna di geofence ini
                         geofenceStatus[geofence] = isInsideGeofence
@@ -213,21 +223,34 @@ class ChildLocationService : Service() {
         return notificationBuilder.build()
     }
 
-    private fun buildGeofenceNotification(label: String, type: String, zoneType: String) {
+    private fun buildGeofenceNotification(
+        label: String,
+        type: String,
+        zoneType: String,
+        geofenceId: String
+    ) {
         val notificationIntent = Intent(this, ChildActivity::class.java)
         val pendingFlags: Int =
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         val pendingIntent = PendingIntent.getActivity(this, 3, notificationIntent, pendingFlags)
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val vibrationPattern = longArrayOf(
-            0,   // Initial delay
-            1000, 500,  // First vibration and pause
-            1000, 500,  // Second vibration and pause
-            1000, 500,  // Third vibration and pause
-            1000, 500,  // Fourth vibration and pause
-            1000        // Fifth vibration (no pause needed at the end)
-        )
+        val vibrationPattern = if (zoneType == "bahaya" || type == "keluar dari") {
+            longArrayOf(
+                0,   // Initial delay
+                1000, 500,  // First vibration and pause
+                1000, 500,  // Second vibration and pause
+                1000, 500,  // Third vibration and pause
+                1000, 500,  // Fourth vibration and pause
+                1000        // Fifth vibration (no pause needed at the end)
+            )
+        } else {
+            longArrayOf(
+                0,   // Initial delay
+                1000, 500,  // First vibration and pause
+                1000
+            )
+        }
 
         val mNotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -251,14 +274,7 @@ class ChildLocationService : Service() {
                 GEOFENCE_CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                this.vibrationPattern = longArrayOf(
-                    0,   // Initial delay
-                    1000, 500,  // First vibration and pause
-                    1000, 500,  // Second vibration and pause
-                    1000, 500,  // Third vibration and pause
-                    1000, 500,  // Fourth vibration and pause
-                    1000        // Fifth vibration (no pause needed at the end)
-                )
+                this.vibrationPattern = vibrationPattern
                 enableVibration(true)
             }
             channel.description = GEOFENCE_CHANNEL_NAME
@@ -266,7 +282,8 @@ class ChildLocationService : Service() {
             mNotificationManager.createNotificationChannel(channel)
         }
 
-        val notificationId = (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
+//        val notificationId = (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
+        val notificationId = (geofenceId.toLong() % Int.MAX_VALUE).toInt()
         mNotificationManager.notify(notificationId, notificationBuilder.build())
 
         triggerVibration(vibrationPattern)

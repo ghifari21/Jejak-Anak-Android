@@ -34,6 +34,7 @@ import com.gosty.jejakanak.R
 import com.gosty.jejakanak.core.domain.models.ChildModel
 import com.gosty.jejakanak.core.ui.RvChildListAdapter
 import com.gosty.jejakanak.databinding.FragmentParentChildrenListBinding
+import com.gosty.jejakanak.ui.parent.map.ParentMapsFragment
 import com.gosty.jejakanak.utils.Result
 import com.gosty.jejakanak.utils.showContentState
 import com.gosty.jejakanak.utils.showErrorState
@@ -280,8 +281,8 @@ class ParentChildrenListFragment : Fragment(), MultiStateView.StateListener {
 
     private fun seeChildLocation(child: ChildModel) {
         val bundle = Bundle().apply {
-            putDouble(EXTRA_LATITUDE, child.coordinate?.latitude!!)
-            putDouble(EXTRA_LONGITUDE, child.coordinate.longitude!!)
+            putDouble(ParentMapsFragment.EXTRA_LATITUDE, child.coordinate?.latitude!!)
+            putDouble(ParentMapsFragment.EXTRA_LONGITUDE, child.coordinate.longitude!!)
         }
 
         findNavController().navigate(
@@ -352,7 +353,5 @@ class ParentChildrenListFragment : Fragment(), MultiStateView.StateListener {
 
     companion object {
         private val TAG = ParentChildrenListFragment::class.java.simpleName
-        const val EXTRA_LONGITUDE = "extra_longitude"
-        const val EXTRA_LATITUDE = "extra_latitude"
     }
 }

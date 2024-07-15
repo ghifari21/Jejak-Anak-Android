@@ -24,6 +24,8 @@ object GeofenceHelper {
             val currentPoint = polygon[i]
             val nextPoint = polygon[(i + 1) % polygon.size]
 
+            if (isPointOnEdge(point, currentPoint, nextPoint)) return 1
+
             if (currentPoint.latitude!! <= point.latitude!!) {
                 if (nextPoint.latitude!! > point.latitude && isLeft(
                         currentPoint,
@@ -50,7 +52,44 @@ object GeofenceHelper {
         return (p1.longitude!! - p0.longitude!!) * (p2.latitude!! - p0.latitude!!) - (p2.longitude!! - p0.longitude) * (p1.latitude!! - p0.latitude)
     }
 
-    fun addPolygonZone(coordinates: List<LatLng>, zoneType: String): PolygonOptions {
+    private fun isPointOnEdge(
+        point: CoordinateModel,
+        start: CoordinateModel,
+        end: CoordinateModel
+    ): Boolean {
+        // Cek apakah titik berada di antara dua ujung dan pada garis yang menghubungkan dua ujung
+        val crossProduct =
+            (point.latitude!! - start.latitude!!) * (end.longitude!! - start.longitude!!) -
+                    (point.longitude!! - start.longitude) * (end.latitude!! - start.latitude)
+        if (crossProduct != 0.0) return false
+
+        val dotProduct =
+            (point.latitude - start.latitude) * (end.latitude - start.latitude) +
+                    (point.longitude - start.longitude) * (end.longitude - start.longitude)
+        if (dotProduct < 0) return false
+
+        val squaredLengthBA =
+            (end.latitude - start.latitude) * (end.latitude - start.latitude) +
+                    (end.longitude - start.longitude) * (end.longitude - start.longitude)
+        if (dotProduct > squaredLengthBA) return false
+
+        return true
+    }
+
+    fun calculateCentroid(points: List<CoordinateModel>): LatLng {
+        var latitude = 0.0
+        var longitude = 0.0
+
+        for (point in points) {
+            latitude += point.latitude!!
+            longitude += point.longitude!!
+        }
+
+        val numPoints = points.size
+        return LatLng(latitude / numPoints, longitude / numPoints)
+    }
+
+    fun createPolygonZone(coordinates: List<LatLng>, zoneType: String): PolygonOptions {
         val polygonOptions = if (zoneType == "danger") {
             PolygonOptions()
                 .strokeColor(Color.RED)

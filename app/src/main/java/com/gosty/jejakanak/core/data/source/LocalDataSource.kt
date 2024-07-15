@@ -4,4 +4,6 @@ interface LocalDataSource {
     fun getUserRole(): String
 
     fun setUserRole(role: String)
+
+    suspend fun removeCredential()
 }

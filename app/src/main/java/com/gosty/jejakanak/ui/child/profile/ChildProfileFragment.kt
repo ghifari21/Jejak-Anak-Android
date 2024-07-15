@@ -8,11 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.credentials.ClearCredentialStateRequest
-import androidx.credentials.CredentialManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -29,7 +26,6 @@ import com.gosty.jejakanak.utils.showErrorState
 import com.gosty.jejakanak.utils.showLoadingState
 import com.kennyc.view.MultiStateView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -167,26 +163,23 @@ class ChildProfileFragment : Fragment(), MultiStateView.StateListener {
             .setTitle(activity?.getString(R.string.confirmation))
             .setMessage(activity?.getString(R.string.are_you_sure))
             .setPositiveButton(activity?.getString(R.string.yes)) { _, _ ->
-                lifecycleScope.launch {
-                    val credentialManager = CredentialManager.create(requireActivity())
-                    firebaseAuth.signOut()
-                    credentialManager.clearCredentialState(ClearCredentialStateRequest())
+                viewModel.signOut()
 
-                    viewModel.deleteUserRole()
+                val serviceIntent = Intent(requireActivity(), ChildLocationService::class.java)
+                activity?.stopService(serviceIntent)
 
-                    val serviceIntent = Intent(requireActivity(), ChildLocationService::class.java)
-                    activity?.stopService(serviceIntent)
-
-                    val intent = Intent(requireActivity(), AuthActivity::class.java)
-                    startActivity(intent)
-                    activity?.finish()
-                }
-
+                toAuthActivity()
             }
             .setNegativeButton(activity?.getString(R.string.no)) { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
+    }
+
+    private fun toAuthActivity() {
+        val intent = Intent(requireActivity(), AuthActivity::class.java)
+        startActivity(intent)
+        activity?.finish()
     }
 
     override fun onStateChanged(viewState: MultiStateView.ViewState) {}

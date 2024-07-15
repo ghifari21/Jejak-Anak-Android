@@ -11,6 +11,8 @@ import com.gosty.jejakanak.utils.Result
 interface FirebaseDataSource {
     fun signIn(credential: AuthCredential, isParent: Boolean): LiveData<Result<String>>
 
+    fun signOut()
+
     fun isUserPhoneNumberExist(isParent: Boolean): LiveData<Result<Boolean>>
 
     fun inputUserPhoneNumber(phoneNumber: String, isParent: Boolean): LiveData<Result<String>>

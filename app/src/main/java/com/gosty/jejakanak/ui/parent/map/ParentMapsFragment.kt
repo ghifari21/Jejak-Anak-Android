@@ -41,7 +41,6 @@ import com.gosty.jejakanak.databinding.FragmentParentMapsBinding
 import com.gosty.jejakanak.helpers.GeofenceHelper
 import com.gosty.jejakanak.services.ParentLocationService
 import com.gosty.jejakanak.ui.parent.main.ParentActivity
-import com.gosty.jejakanak.ui.parent.manage.children.ParentChildrenListFragment
 import com.gosty.jejakanak.utils.Result
 import com.gosty.jejakanak.utils.isServiceRunning
 import com.gosty.jejakanak.utils.showContentState
@@ -72,10 +71,10 @@ class ParentMapsFragment : Fragment(), MultiStateView.StateListener {
         getMyLocation()
         createLocationRequest()
 
-        val seeChildLat = arguments?.getDouble(ParentChildrenListFragment.EXTRA_LATITUDE)
-        val seeChildLong = arguments?.getDouble(ParentChildrenListFragment.EXTRA_LONGITUDE)
-        if (seeChildLat != null && seeChildLong != null) {
-            moveCameraToLocation(seeChildLat, seeChildLong)
+        val bundleLat = arguments?.getDouble(EXTRA_LATITUDE)
+        val bundleLong = arguments?.getDouble(EXTRA_LONGITUDE)
+        if (bundleLat != null && bundleLong != null) {
+            moveCameraToLocation(bundleLat, bundleLong)
         }
 
         val child = arguments?.getParcelable<ChildModel>(ParentActivity.EXTRA_CHILD_PARCELABLE)
@@ -178,11 +177,27 @@ class ParentMapsFragment : Fragment(), MultiStateView.StateListener {
 
                         polygons.add(
                             mMap.addPolygon(
-                                GeofenceHelper.addPolygonZone(
+                                GeofenceHelper.createPolygonZone(
                                     coordinates!!,
                                     geofence.type!!
                                 )
                             )
+                        )
+
+                        val color = if (geofence.type == "danger") {
+                            BitmapDescriptorFactory.HUE_RED
+                        } else {
+                            BitmapDescriptorFactory.HUE_GREEN
+                        }
+
+                        val centroid = GeofenceHelper.calculateCentroid(geofence.coordinates)
+                        mMap.addMarker(
+                            MarkerOptions()
+                                .position(centroid)
+                                .icon(
+                                    BitmapDescriptorFactory.defaultMarker(color)
+                                )
+                                .title(geofence.label)
                         )
                     }
                 }
@@ -285,12 +300,12 @@ class ParentMapsFragment : Fragment(), MultiStateView.StateListener {
                 .addOnSuccessListener {
                     if (it != null) {
                         moveCameraToLocation(it.latitude, it.longitude)
-                        val seeChildLat =
-                            arguments?.getDouble(ParentChildrenListFragment.EXTRA_LATITUDE)
-                        val seeChildLong =
-                            arguments?.getDouble(ParentChildrenListFragment.EXTRA_LONGITUDE)
-                        if (seeChildLat != null && seeChildLong != null) {
-                            moveCameraToLocation(seeChildLat, seeChildLong)
+                        val bundleLat =
+                            arguments?.getDouble(EXTRA_LATITUDE)
+                        val bundleLong =
+                            arguments?.getDouble(EXTRA_LONGITUDE)
+                        if (bundleLat != null && bundleLong != null) {
+                            moveCameraToLocation(bundleLat, bundleLong)
                         }
 
                         val child =
@@ -353,5 +368,7 @@ class ParentMapsFragment : Fragment(), MultiStateView.StateListener {
 
     companion object {
         private val TAG = ParentMapsFragment::class.java.simpleName
+        const val EXTRA_LONGITUDE = "extra_longitude"
+        const val EXTRA_LATITUDE = "extra_latitude"
     }
 }

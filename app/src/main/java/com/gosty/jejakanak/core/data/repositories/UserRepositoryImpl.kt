@@ -24,6 +24,12 @@ class UserRepositoryImpl @Inject constructor(
     override fun signIn(credential: AuthCredential, isParent: Boolean): LiveData<Result<String>> =
         firebaseDataSource.signIn(credential, isParent)
 
+    override suspend fun signOut() {
+        localDataSource.removeCredential()
+        localDataSource.setUserRole("")
+        firebaseDataSource.signOut()
+    }
+
     override fun isUserPhoneNumberExist(): LiveData<Result<Boolean>> =
         firebaseDataSource.isUserPhoneNumberExist(localDataSource.getUserRole() == "Parent")
 

@@ -1,6 +1,7 @@
 package com.gosty.jejakanak.core.di
 
 import android.content.Context
+import androidx.credentials.CredentialManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.FirebaseDatabase
@@ -34,6 +35,14 @@ object DataSourceModule {
 
     @Provides
     @Singleton
-    fun provideLocalDataSource(sharedPreferenceHelper: SharedPreferenceHelper): LocalDataSource =
-        LocalDataSourceImpl(sharedPreferenceHelper)
+    fun provideCredentialManager(@ApplicationContext context: Context): CredentialManager =
+        CredentialManager.create(context)
+
+    @Provides
+    @Singleton
+    fun provideLocalDataSource(
+        sharedPreferenceHelper: SharedPreferenceHelper,
+        credentialManager: CredentialManager
+    ): LocalDataSource =
+        LocalDataSourceImpl(sharedPreferenceHelper, credentialManager)
 }

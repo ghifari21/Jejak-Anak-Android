@@ -161,7 +161,7 @@ class ParentAddGeofenceMapsActivity : AppCompatActivity(), OnMapReadyCallback,
                                 LatLng(coordinate.latitude!!, coordinate.longitude!!)
                             }
                             mMap.addPolygon(
-                                GeofenceHelper.addPolygonZone(
+                                GeofenceHelper.createPolygonZone(
                                     coordinates!!,
                                     geofence.type!!
                                 )
@@ -267,7 +267,7 @@ class ParentAddGeofenceMapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 geofenceMarkers.forEach { marker ->
                     marker.remove()
                 }
-                val polygon = GeofenceHelper.addPolygonZone(latLngList, "danger")
+                val polygon = GeofenceHelper.createPolygonZone(latLngList, "danger")
                 mMap.addPolygon(polygon)
                 val intent = Intent()
                 if (id != null) {

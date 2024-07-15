@@ -35,6 +35,13 @@ fun getRandomString(): String {
         .joinToString("")
 }
 
+fun makeId(): String {
+    val allowedChars = '0'..'9'
+    return (1..10)
+        .map { allowedChars.random() }
+        .joinToString("")
+}
+
 fun Float.toKm(): Float = this / 1000
 
 fun MultiStateView.showLoadingState() {

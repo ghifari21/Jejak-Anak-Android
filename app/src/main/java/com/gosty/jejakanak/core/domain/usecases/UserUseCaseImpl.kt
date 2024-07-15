@@ -15,6 +15,8 @@ class UserUseCaseImpl @Inject constructor(
     override fun signIn(credential: AuthCredential, isParent: Boolean): LiveData<Result<String>> =
         userRepository.signIn(credential, isParent)
 
+    override suspend fun signOut() = userRepository.signOut()
+
     override fun isUserPhoneNumberExist(): LiveData<Result<Boolean>> =
         userRepository.isUserPhoneNumberExist()
 

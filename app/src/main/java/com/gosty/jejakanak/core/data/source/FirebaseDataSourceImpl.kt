@@ -17,6 +17,7 @@ import com.gosty.jejakanak.core.data.models.GeofenceEntity
 import com.gosty.jejakanak.core.data.models.ParentEntity
 import com.gosty.jejakanak.utils.Result
 import com.gosty.jejakanak.utils.getRandomString
+import com.gosty.jejakanak.utils.makeId
 import com.gosty.jejakanak.utils.splitName
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -131,6 +132,8 @@ class FirebaseDataSourceImpl @Inject constructor(
         return result
     }
 
+    override fun signOut() = auth.signOut()
+
     override fun isUserPhoneNumberExist(isParent: Boolean): LiveData<Result<Boolean>> {
         val uid = auth.currentUser?.uid
         val result = MediatorLiveData<Result<Boolean>>()
@@ -235,7 +238,7 @@ class FirebaseDataSourceImpl @Inject constructor(
                     val parentIds = mutableListOf<String>()
                     parentIds.add(uid!!)
 
-                    if (child.parentId.isNullOrEmpty()) {
+                    if (child.parentId?.isNotEmpty() == true) {
                         parentIds.addAll(child.parentId!!)
                     }
 
@@ -499,7 +502,7 @@ class FirebaseDataSourceImpl @Inject constructor(
         val uid = auth.currentUser?.uid
         val parentRef = database.reference.child(BuildConfig.PARENT_REF)
         geofence.parentId = uid
-        geofence.id = getRandomString()
+        geofence.id = makeId()
         parentRef.child(uid!!).child("geofences").get()
             .addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {

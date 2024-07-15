@@ -25,6 +25,7 @@ import com.gosty.jejakanak.helpers.GeofenceHelper
 import com.gosty.jejakanak.ui.parent.main.ParentActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.math.min
 
 @AndroidEntryPoint
 class ParentLocationService : Service() {
@@ -126,7 +127,8 @@ class ParentLocationService : Service() {
         label: String,
         action: String,
         zoneType: String,
-        child: ChildModel
+        child: ChildModel,
+        geofenceId: String
     ) {
         val notificationIntent = Intent(this, ParentActivity::class.java).apply {
             this.action = ACTION_OPEN_MAP_FRAGMENT
@@ -138,14 +140,22 @@ class ParentLocationService : Service() {
 
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val vibrationPattern = longArrayOf(
-            0,   // Initial delay
-            1000, 500,  // First vibration and pause
-            1000, 500,  // Second vibration and pause
-            1000, 500,  // Third vibration and pause
-            1000, 500,  // Fourth vibration and pause
-            1000        // Fifth vibration (no pause needed at the end)
-        )
+        val vibrationPattern = if (zoneType == "bahaya" || action == "keluar dari") {
+            longArrayOf(
+                0,   // Initial delay
+                1000, 500,  // First vibration and pause
+                1000, 500,  // Second vibration and pause
+                1000, 500,  // Third vibration and pause
+                1000, 500,  // Fourth vibration and pause
+                1000        // Fifth vibration (no pause needed at the end)
+            )
+        } else {
+            longArrayOf(
+                0,   // Initial delay
+                1000, 500,  // First vibration and pause
+                1000
+            )
+        }
 
         val mNotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -177,14 +187,7 @@ class ParentLocationService : Service() {
                 GEOFENCE_CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                this.vibrationPattern = longArrayOf(
-                    0,   // Initial delay
-                    1000, 500,  // First vibration and pause
-                    1000, 500,  // Second vibration and pause
-                    1000, 500,  // Third vibration and pause
-                    1000, 500,  // Fourth vibration and pause
-                    1000        // Fifth vibration (no pause needed at the end)
-                )
+                this.vibrationPattern = vibrationPattern
                 enableVibration(true)
             }
             channel.description = GEOFENCE_CHANNEL_NAME
@@ -192,7 +195,9 @@ class ParentLocationService : Service() {
             mNotificationManager.createNotificationChannel(channel)
         }
 
-        val notificationId = (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
+//        val notificationId = (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
+        val id = geofenceId + child.phone
+        val notificationId = (id.substring(0, min(id.length, 15)).toLong() % Int.MAX_VALUE).toInt()
         mNotificationManager.notify(notificationId, notificationBuilder.build())
 
         triggerVibration(vibrationPattern)
@@ -263,32 +268,31 @@ class ParentLocationService : Service() {
     private fun checkGeofenceStatus(geofence: GeofenceModel, child: ChildModel) {
         val result = GeofenceHelper.windingNumber(child.coordinate!!, geofence.coordinates!!)
 
-        // Cek apakah status pengguna berubah untuk geofence ini
         val isInsideGeofence = result != 0
         val wasInsideGeofence = geofenceStatus[child.id!!]?.get(geofence) ?: false
 
         if (isInsideGeofence != wasInsideGeofence) {
             val type = if (geofence.type == "danger") "bahaya" else "aman"
             if (isInsideGeofence) {
-                // Pengguna masuk ke geofence
                 buildGeofenceNotification(
                     child.firstName!!,
                     geofence.label!!,
                     "memasuki",
                     type,
-                    child
+                    child,
+                    geofence.id!!
                 )
             } else {
-                // Pengguna keluar dari geofence
                 buildGeofenceNotification(
                     child.firstName!!,
                     geofence.label!!,
                     "keluar dari",
                     type,
-                    child
+                    child,
+                    geofence.id!!
                 )
             }
-            // Update status pengguna di geofence ini
+
             geofenceStatus[child.id]?.set(geofence, isInsideGeofence)
         }
     }

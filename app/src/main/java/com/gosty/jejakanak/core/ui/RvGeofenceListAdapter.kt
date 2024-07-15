@@ -35,6 +35,9 @@ class RvGeofenceListAdapter :
         holder.binding.btnDeleteGeofence.setOnClickListener {
             onItemClickCallback.onDeleteGeofenceClicked(geofence)
         }
+        holder.itemView.setOnClickListener {
+            onItemClickCallback.onGeofenceClicked(geofence)
+        }
     }
 
     class RvGeofenceListViewHolder(val binding: CardGeofenceItemBinding) :
@@ -57,6 +60,7 @@ class RvGeofenceListAdapter :
     interface OnItemClickCallback {
         fun onEditGeofenceClicked(geofenceModel: GeofenceModel)
         fun onDeleteGeofenceClicked(geofenceModel: GeofenceModel)
+        fun onGeofenceClicked(geofenceModel: GeofenceModel)
     }
 
     companion object {

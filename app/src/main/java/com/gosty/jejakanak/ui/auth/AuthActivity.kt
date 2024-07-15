@@ -27,6 +27,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingExcept
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.gosty.jejakanak.R
 import com.gosty.jejakanak.databinding.ActivityAuthBinding
@@ -37,11 +38,15 @@ import com.gosty.jejakanak.utils.showContentState
 import com.gosty.jejakanak.utils.showLoadingState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAuthBinding
     private val viewModel: AuthViewModel by viewModels()
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -127,7 +132,11 @@ class AuthActivity : AppCompatActivity() {
                 }
             }
             .setNegativeButton(R.string.cancel) { dialog, _ ->
+                viewModel.signOut()
                 dialog.dismiss()
+            }
+            .setOnCancelListener {
+                viewModel.signOut()
             }
             .show()
     }
@@ -224,13 +233,7 @@ class AuthActivity : AppCompatActivity() {
                 is Result.Success -> {
                     binding.authStateView.showContentState()
                     if (it.data) {
-                        val intent = if (isParent) {
-                            Intent(this@AuthActivity, ParentActivity::class.java)
-                        } else {
-                            Intent(this@AuthActivity, ChildActivity::class.java)
-                        }
-                        startActivity(intent)
-                        finish()
+                        toHomePage(isParent)
                     } else {
                         phoneNumberDialog(isParent)
                     }
@@ -243,6 +246,16 @@ class AuthActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun toHomePage(isParent: Boolean) {
+        val intent = if (isParent) {
+            Intent(this@AuthActivity, ParentActivity::class.java)
+        } else {
+            Intent(this@AuthActivity, ChildActivity::class.java)
+        }
+        startActivity(intent)
+        finish()
     }
 
     private fun inputPhoneNumber(phoneNumber: String, isParent: Boolean) {

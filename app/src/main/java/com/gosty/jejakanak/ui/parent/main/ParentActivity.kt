@@ -2,7 +2,6 @@ package com.gosty.jejakanak.ui.parent.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -36,7 +35,6 @@ class ParentActivity : AppCompatActivity() {
 
         setupBottomNav()
         handleIntent(intent)
-        Log.d("testst", intent.toString())
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -49,7 +47,7 @@ class ParentActivity : AppCompatActivity() {
         if (intent.action == ParentLocationService.ACTION_OPEN_MAP_FRAGMENT) {
             val childModel: ChildModel? =
                 intent.getParcelableExtra(ParentLocationService.EXTRA_CHILD_SERVICE)
-            Log.d("test", childModel.toString())
+
             if (childModel != null) {
                 val bundle = Bundle().apply {
                     putParcelable(EXTRA_CHILD_PARCELABLE, childModel)

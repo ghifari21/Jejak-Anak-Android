@@ -154,7 +154,7 @@ class ChildMapsFragment : Fragment(), MultiStateView.StateListener {
                         }
                         polygons.add(
                             mMap.addPolygon(
-                                GeofenceHelper.addPolygonZone(
+                                GeofenceHelper.createPolygonZone(
                                     coordinates!!,
                                     geofence.type!!
                                 )
