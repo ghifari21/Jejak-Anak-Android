@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_child_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:elevation="2dp"
+    app:cardCornerRadius="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/child_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_bg_rounded_corner_bordered_white_stroke_dark_blue_12_full_radius">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_child_avatar"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_marginVertical="16dp"
+            android:layout_marginStart="16dp"
+            app:civ_border_color="@color/dark_blue_0A2647"
+            app:civ_border_width="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:id="@+id/container_child_data"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/iv_child_avatar"
+            app:layout_constraintEnd_toStartOf="@id/btn_see_child"
+            app:layout_constraintStart_toEndOf="@id/iv_child_avatar"
+            app:layout_constraintTop_toTopOf="@id/iv_child_avatar">
+
+            <TextView
+                android:id="@+id/tv_child_name"
+                style="@style/font_16_bold_dark_blue_180B3F"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                tools:text="@tools:sample/first_names" />
+
+            <TextView
+                android:id="@+id/tv_child_email"
+                style="@style/font_14_medium_primary_40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                tools:text="@tools:sample/lorem" />
+
+            <TextView
+                android:id="@+id/tv_child_distance"
+                style="@style/font_14_normal_red_DC2020"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="@tools:sample/us_zipcodes" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btn_see_child"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/shape_bg_rounded_corner_button_refresh_green_12_full_radius"
+            android:src="@drawable/ic_eye_white"
+            app:layout_constraintBottom_toBottomOf="@id/container_child_data"
+            app:layout_constraintEnd_toStartOf="@id/btn_delete_child"
+            app:layout_constraintTop_toTopOf="@id/container_child_data" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btn_delete_child"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/shape_bg_rounded_corner_button_logout_red_12_full_radius"
+            android:src="@drawable/ic_delete_white"
+            app:layout_constraintBottom_toBottomOf="@id/btn_see_child"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_see_child" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

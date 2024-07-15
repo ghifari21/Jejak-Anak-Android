@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.kennyc.view.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/msv_parent_profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:msv_errorView="@layout/layout_error_common"
+    app:msv_loadingView="@layout/layout_loading_common"
+    app:msv_viewState="content"
+    tools:context=".ui.parent.profile.ParentProfileFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent_profile_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/parent_profile_first_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/shape_bg_rounded_corner_profile_first_section_dark_blue_20_full_radius"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_parent_profile_avatar"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                app:civ_border_color="@color/dark_blue_0A2647"
+                app:civ_border_width="1dp"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_parent_profile_name"
+                style="@style/font_16_bold_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textAlignment="center"
+                tools:text="@tools:sample/full_names" />
+
+            <TextView
+                android:id="@+id/tv_parent_profile_email"
+                style="@style/font_14_medium_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                tools:text="@tools:sample/full_names" />
+
+            <TextView
+                android:id="@+id/tv_parent_profile_phone"
+                style="@style/font_14_medium_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                tools:text="@tools:sample/us_phones" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/parent_profile_second_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/shape_bg_rounded_corner_profile_second_section_gray_20_full_radius"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/parent_profile_first_section">
+
+            <TextView
+                android:id="@+id/tv_total_geofence_title"
+                style="@style/font_14_normal_dark_blue_180B3F"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_child"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/tv_total_geofence"
+                style="@style/font_24_bold_dark_blue_180B3F"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                tools:text="@tools:sample/us_zipcodes" />
+
+            <TextView
+                android:id="@+id/tv_total_child_title"
+                style="@style/font_14_normal_dark_blue_180B3F"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/total_child"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/tv_total_child"
+                style="@style/font_24_bold_dark_blue_180B3F"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                tools:text="@tools:sample/us_zipcodes" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_parent_logout"
+            style="@style/font_14_bold_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="66dp"
+            android:backgroundTint="@color/red_DC2020"
+            android:gravity="center"
+            android:text="@string/logout_button"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            app:cornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.kennyc.view.MultiStateView>
