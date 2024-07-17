@@ -322,6 +322,13 @@ class ChildLocationService : Service() {
             if (list.isNotEmpty()) {
                 if (geofences.values.size != list.size) {
                     getGeofencesOnce()
+                } else {
+                    for (i in list.indices) {
+                        if (geofences[list[i].id!!] != list[i]) {
+                            getGeofencesOnce()
+                            break
+                        }
+                    }
                 }
             }
         }
