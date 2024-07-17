@@ -31,7 +31,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
 import com.gosty.jejakanak.R
 import com.gosty.jejakanak.databinding.FragmentChildMapsBinding
@@ -57,6 +60,7 @@ class ChildMapsFragment : Fragment(), MultiStateView.StateListener {
     private lateinit var multiStateView: MultiStateView
     private val viewModel: ChildMapsViewModel by viewModels()
     private val polygons = mutableListOf<Polygon>()
+    private val markers = mutableListOf<Marker>()
 
     private val callback = OnMapReadyCallback { googleMap ->
 
@@ -148,6 +152,9 @@ class ChildMapsFragment : Fragment(), MultiStateView.StateListener {
                     polygons.forEach { polygon ->
                         polygon.remove()
                     }
+                    markers.forEach { marker ->
+                        marker.remove()
+                    }
                     it.data.forEach { geofence ->
                         val coordinates = geofence.coordinates?.map { coordinate ->
                             LatLng(coordinate.latitude!!, coordinate.longitude!!)
@@ -159,6 +166,25 @@ class ChildMapsFragment : Fragment(), MultiStateView.StateListener {
                                     geofence.type!!
                                 )
                             )
+                        )
+
+                        val color = if (geofence.type == "danger") {
+                            BitmapDescriptorFactory.HUE_RED
+                        } else {
+                            BitmapDescriptorFactory.HUE_GREEN
+                        }
+
+                        val centroid = GeofenceHelper.calculateCentroid(geofence.coordinates)
+                        val marker = MarkerOptions()
+                            .position(centroid)
+                            .icon(
+                                BitmapDescriptorFactory.defaultMarker(color)
+                            )
+                            .title(geofence.label)
+
+                        val markerMap = mMap.addMarker(marker)
+                        markers.add(
+                            markerMap!!
                         )
                     }
                 }

@@ -61,6 +61,7 @@ class ParentMapsFragment : Fragment(), MultiStateView.StateListener {
     private val viewModel: ParentMapsViewModel by viewModels()
     private val childMarkers = HashMap<String, Marker>()
     private val polygons = mutableListOf<Polygon>()
+    private val markers = mutableListOf<Marker>()
 
     private val callback = OnMapReadyCallback { googleMap ->
 
@@ -167,8 +168,11 @@ class ParentMapsFragment : Fragment(), MultiStateView.StateListener {
             when (it) {
                 is Result.Success -> {
                     binding?.parentMapsContainer?.showContentState()
-                    polygons.forEach { polygons ->
-                        polygons.remove()
+                    polygons.forEach { polygon ->
+                        polygon.remove()
+                    }
+                    markers.forEach { marker ->
+                        marker.remove()
                     }
                     it.data.forEach { geofence ->
                         val coordinates = geofence.coordinates?.map { coordinate ->
@@ -191,13 +195,16 @@ class ParentMapsFragment : Fragment(), MultiStateView.StateListener {
                         }
 
                         val centroid = GeofenceHelper.calculateCentroid(geofence.coordinates)
-                        mMap.addMarker(
-                            MarkerOptions()
-                                .position(centroid)
-                                .icon(
-                                    BitmapDescriptorFactory.defaultMarker(color)
-                                )
-                                .title(geofence.label)
+                        val marker = MarkerOptions()
+                            .position(centroid)
+                            .icon(
+                                BitmapDescriptorFactory.defaultMarker(color)
+                            )
+                            .title(geofence.label)
+
+                        val markerMap = mMap.addMarker(marker)
+                        markers.add(
+                            markerMap!!
                         )
                     }
                 }
