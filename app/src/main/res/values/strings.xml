@@ -41,7 +41,7 @@
     <string name="shared_location_title">Terpantau Orang Tua</string>
     <string name="shared_location_content">Lokasi kamu dibagikan ke orang tua.</string>
     <string name="child_geofence_content">Kamu %s  zona %s</string>
-    <string name="parent_geofence_content">%s telah %s dari zona %s %s</string>
+    <string name="parent_geofence_content">%s telah %s zona %s %s</string>
     <string name="empty_parent_profile">Kamu belum didaftarkan orang tua kamu :(</string>
     <string name="child_monitored">Pantau Anak</string>
     <string name="child_monitored_content">Anak kamu sedang terpantau oleh pagar virtual.</string>

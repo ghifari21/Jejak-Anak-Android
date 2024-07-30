@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.PolygonOptions
 import com.gosty.jejakanak.R
 import com.gosty.jejakanak.core.domain.models.CoordinateModel
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlin.math.cos
 
 object GeofenceHelper {
     fun windingNumber(point: CoordinateModel, polygon: List<CoordinateModel>): Int {
@@ -102,6 +103,18 @@ object GeofenceHelper {
         polygonOptions.addAll(coordinates)
 
         return polygonOptions
+    }
+
+    fun addBuffer(coordinate: CoordinateModel, bufferDistance: Double): CoordinateModel {
+        val distance = 111320.0
+
+        return CoordinateModel(
+            id = coordinate.id,
+            latitude = coordinate.latitude!! + (bufferDistance / distance),
+            longitude = coordinate.longitude!! + (bufferDistance / (distance * cos(coordinate.latitude))),
+            dateTime = coordinate.dateTime,
+            updatedAt = coordinate.updatedAt
+        )
     }
 
     fun createCustomMarker(context: Context, imageUrl: String, callback: (Bitmap) -> Unit) {
