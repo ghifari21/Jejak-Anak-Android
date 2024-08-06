@@ -24,6 +24,11 @@ import com.gosty.jejakanak.core.domain.usecases.UserUseCase
 import com.gosty.jejakanak.helpers.GeofenceHelper
 import com.gosty.jejakanak.ui.parent.main.ParentActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.min
 
@@ -39,10 +44,13 @@ class ParentLocationService : Service() {
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
 
+    private val serviceJob = Job()
+    private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
+
     private val geofences = mutableMapOf<String, GeofenceModel>()
     private val geofenceStatus = mutableMapOf<String, MutableMap<GeofenceModel, Boolean>>()
     private val children = mutableMapOf<String, ChildModel>()
-
+    private val childExitTimeouts = mutableMapOf<Pair<String, GeofenceModel>, Job?>()
 
     override fun onCreate() {
         super.onCreate()
@@ -273,34 +281,60 @@ class ParentLocationService : Service() {
     }
 
     private fun checkGeofenceStatus(geofence: GeofenceModel, child: ChildModel) {
-        val result = GeofenceHelper.windingNumber(child.coordinate!!, geofence.coordinates!!)
+        // Add buffer to geofence
+        val bufferedGeofence = geofence.coordinates!!.map { coordinate ->
+            GeofenceHelper.addBuffer(coordinate, 10.0) // 10 meters buffer
+        }
+
+        val result = GeofenceHelper.windingNumber(child.coordinate!!, bufferedGeofence)
+        val wasInsideGeofence = geofenceStatus[child.id!!]?.get(geofence) ?: false
 
         val isInsideGeofence = result != 0
-        val wasInsideGeofence = geofenceStatus[child.id!!]?.get(geofence) ?: false
+        val timeoutDuration = 2 * 60 * 1000L // 2 minutes
+
+        val timeoutKey = Pair(child.id, geofence)
 
         if (isInsideGeofence != wasInsideGeofence) {
             val type = if (geofence.type == "danger") "bahaya" else "aman"
             if (isInsideGeofence) {
-                buildGeofenceNotification(
-                    child.firstName!!,
-                    geofence.label!!,
-                    "memasuki",
-                    type,
-                    child,
-                    geofence.id!!
-                )
+                if (childExitTimeouts[timeoutKey] == null) {
+                    buildGeofenceNotification(
+                        child.firstName!!,
+                        geofence.label!!,
+                        "memasuki",
+                        type,
+                        child,
+                        geofence.id!!
+                    )
+                }
+
+                // Cancel any existing exit timeout job
+                childExitTimeouts[timeoutKey]?.cancel()
+                childExitTimeouts[timeoutKey] = null
             } else {
-                buildGeofenceNotification(
-                    child.firstName!!,
-                    geofence.label!!,
-                    "keluar dari",
-                    type,
-                    child,
-                    geofence.id!!
-                )
+                // Start a coroutine to wait for 2 minutes before sending the exit notification
+                childExitTimeouts[timeoutKey]?.cancel()
+                childExitTimeouts[timeoutKey] = serviceScope.launch {
+                    delay(timeoutDuration) // 2 minutes delay
+
+                    buildGeofenceNotification(
+                        child.firstName!!,
+                        geofence.label!!,
+                        "keluar dari",
+                        type,
+                        child,
+                        geofence.id!!
+                    )
+
+                    childExitTimeouts[timeoutKey] = null
+                }
             }
 
             geofenceStatus[child.id]?.set(geofence, isInsideGeofence)
+        } else if (isInsideGeofence && childExitTimeouts[timeoutKey] != null) {
+            // If the child re-enters the geofence within 2 minutes, cancel the exit timeout
+            childExitTimeouts[timeoutKey]?.cancel()
+            childExitTimeouts[timeoutKey] = null
         }
     }
 
@@ -315,6 +349,7 @@ class ParentLocationService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        serviceJob.cancel()
     }
 
     companion object {

@@ -19,7 +19,8 @@ import com.gosty.jejakanak.ui.auth.AuthActivity
 import com.gosty.jejakanak.ui.child.main.ChildActivity
 import com.gosty.jejakanak.ui.parent.main.ParentActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -67,8 +68,8 @@ class SplashActivity : AppCompatActivity() {
             insets
         }
 
-        GlobalScope.launch {
-            delay(3000)
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(2000)
             if (auth.currentUser == null) {
                 val intent = Intent(this@SplashActivity, AuthActivity::class.java)
                 startActivity(intent)

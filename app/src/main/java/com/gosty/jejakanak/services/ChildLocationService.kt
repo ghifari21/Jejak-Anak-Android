@@ -130,36 +130,41 @@ class ChildLocationService : Service() {
                 }
 
                 geofences.values.forEach { geofence ->
-                    val result = GeofenceHelper.windingNumber(lastLocation, geofence.coordinates!!)
-
-                    // Cek apakah status pengguna berubah untuk geofence ini
-                    val isInsideGeofence = result != 0
-                    val wasInsideGeofence = geofenceStatus[geofence] ?: false
-
-                    if (isInsideGeofence != wasInsideGeofence) {
-                        val type = if (geofence.type == "danger") "bahaya" else "aman"
-                        if (isInsideGeofence) {
-                            // Pengguna masuk ke geofence
-                            buildGeofenceNotification(
-                                geofence.label!!,
-                                "memasuki",
-                                type,
-                                geofence.id!!
-                            )
-                        } else {
-                            // Pengguna keluar dari geofence
-                            buildGeofenceNotification(
-                                geofence.label!!,
-                                "keluar dari",
-                                type,
-                                geofence.id!!
-                            )
-                        }
-                        // Update status pengguna di geofence ini
-                        geofenceStatus[geofence] = isInsideGeofence
-                    }
+                    checkGeofence(lastLocation, geofence)
                 }
             }
+        }
+    }
+
+    private fun checkGeofence(lastLocation: CoordinateModel, geofence: GeofenceModel) {
+        val bufferedGeofence = geofence.coordinates!!.map { coordinate ->
+            GeofenceHelper.addBuffer(coordinate, 10.0) // 10 meter buffer
+        }
+
+        val result = GeofenceHelper.windingNumber(lastLocation, bufferedGeofence)
+
+        val isInsideGeofence = result != 0
+        val wasInsideGeofence = geofenceStatus[geofence] ?: false
+
+        if (isInsideGeofence != wasInsideGeofence) {
+            val type = if (geofence.type == "danger") "bahaya" else "aman"
+            if (isInsideGeofence) {
+                buildGeofenceNotification(
+                    geofence.label!!,
+                    "memasuki",
+                    type,
+                    geofence.id!!
+                )
+            } else {
+                buildGeofenceNotification(
+                    geofence.label!!,
+                    "keluar dari",
+                    type,
+                    geofence.id!!
+                )
+            }
+            // Update status pengguna di geofence ini
+            geofenceStatus[geofence] = isInsideGeofence
         }
     }
 
