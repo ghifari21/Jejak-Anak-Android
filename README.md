@@ -42,7 +42,7 @@ Built with modern Android tech:
 ## 🚀 Installation
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/ghifari21/jejak-anak-android.git](https://github.com/ghifari21/jejak-anak-android.git)
+    git clone https://github.com/ghifari21/jejak-anak-android.git
     ```
 2.  **Open in Android Studio:** Open the cloned repository in Android Studio.
 3.  **Firebase Configuration:**
