@@ -2,7 +2,7 @@
 ![Android API](https://img.shields.io/badge/API-24%2B-brightgreen?style=flat-square)
 
 <div style="width: 100%; max-width: 1024px; height: 500px; overflow: hidden; margin: auto; border-radius: 8px;">
-<img style="width: 100%; height: 100%; object-fit: cover; object-position: center;" alt="Banner Aplikasi Jejak Anak" src="https://github.com/ghifari21/images/blob/be89cb379a66849ef3f5b32a1a4fc4d9d72cf649/Jejak%20Anak/Jejak%20Anak%20Mockup.png" />
+<img style="width: 100%; height: 100%; object-fit: cover; object-position: center;" alt="Banner Aplikasi Jejak Anak" src="https://github.com/ghifari21/Jejak-Anak-Android/blob/1d2c1067c61458c044976109cf78208ecb204952/imgs/Jejak%20Anak%20Mockup.png" />
 </div>
 
 **Jejak Anak** is a child location tracking application designed to give parents peace of mind. Monitor your child's location in *real-time* and easily set up safe zones.
@@ -33,10 +33,10 @@ Built with modern Android tech:
 
 ## 📸 Screenshots
 <div style="display: flex; flex-wrap: wrap; gap: 1%;">
-  <img src="https://github.com/ghifari21/images/blob/be89cb379a66849ef3f5b32a1a4fc4d9d72cf649/Jejak%20Anak/Login%20Page.png" alt="Jejak Anak 1" width="24%" />
-  <img src="https://github.com/ghifari21/images/blob/ff6b79947f59e6ea1de3b7be02b30fa0c382eac3/Jejak%20Anak/Maps%20Page.png" alt="Jejak Anak 2" width="24%" />
-  <img src="https://github.com/ghifari21/images/blob/ff6b79947f59e6ea1de3b7be02b30fa0c382eac3/Jejak%20Anak/Geofence%20List%20Page.png" alt="Jejak Anak 3" width="24%" />
-  <img src="https://github.com/ghifari21/images/blob/ff6b79947f59e6ea1de3b7be02b30fa0c382eac3/Jejak%20Anak/Children%20List%20Page.png" alt="Jejak Anak 4" width="24%" />
+  <img src="https://github.com/ghifari21/Jejak-Anak-Android/blob/1d2c1067c61458c044976109cf78208ecb204952/imgs/Login%20Page.png" alt="Jejak Anak 1" width="24%" />
+  <img src="https://github.com/ghifari21/Jejak-Anak-Android/blob/1d2c1067c61458c044976109cf78208ecb204952/imgs/Maps%20Page.png" alt="Jejak Anak 2" width="24%" />
+  <img src="https://github.com/ghifari21/Jejak-Anak-Android/blob/1d2c1067c61458c044976109cf78208ecb204952/imgs/Geofence%20List%20Page.png" alt="Jejak Anak 3" width="24%" />
+  <img src="https://github.com/ghifari21/Jejak-Anak-Android/blob/1d2c1067c61458c044976109cf78208ecb204952/imgs/Children%20List%20Page.png" alt="Jejak Anak 4" width="24%" />
 </div>
 
 ## 🚀 Installation
