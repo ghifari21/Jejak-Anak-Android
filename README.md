@@ -26,7 +26,7 @@ Built with modern Android tech:
 - **Networking & Database:** [Firebase Realtime Database](https://firebase.google.com/docs/database)
 - **Authentication:** [Firebase Authentication](https://firebase.google.com/docs/auth)
 - **Maps:** [Google Maps Platform](https://developers.google.com/maps)
-- **Asynchronous:** [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) & [Flow](https://kotlinlang.org/docs/flow.html)
+- **Asynchronous:** [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
 - **Architecture:** MVVM + Clean Architecture
 - **Image Loading:** [Glide](https://github.com/bumptech/glide)
 - **UI States:** [MultiStateView](https://github.com/Kennyc1012/MultiStateView)
